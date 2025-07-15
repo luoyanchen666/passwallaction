@@ -3,7 +3,7 @@ name: Build OpenWrt Passwall2
 on:
   repository_dispatch:
   workflow_dispatch:
-
+  
 jobs:
   build-passwall2:
     runs-on: ubuntu-22.04
@@ -31,7 +31,7 @@ jobs:
     - name: Set up build environment
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential libncurses5-dev \
+        sudo apt-get install -y build-essential libncurses-dev \
         zlib1g-dev gawk git gettext libssl-dev xsltproc rsync python3 python3-distutils
         
     - name: Add passwall2 to feed
@@ -42,6 +42,7 @@ jobs:
       run: | 
         # 更新feeds并安装依赖
         ./scripts/feeds update -a
+        ./scripts/feeds uninstal -a
         ./scripts/feeds install -a -f -p passwall_packages
         ./scripts/feeds install -a -f -p passwall2
 
