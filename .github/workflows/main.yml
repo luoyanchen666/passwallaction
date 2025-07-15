@@ -62,7 +62,7 @@ jobs:
     - name: Build passwall2 package
       run: |
         make defconfig
-        make  V=s -j$(nproc)
+        make  package/luci-app-passwall2/compile V=s -j$(nproc)
         
     - name: Collect artifacts
       run: |
