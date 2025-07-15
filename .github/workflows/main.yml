@@ -3,7 +3,7 @@ name: Build OpenWrt Passwall2
 on:
   repository_dispatch:
   workflow_dispatch:
-  continue-on-error: true
+  
   
 jobs:
   build-passwall2:
@@ -45,11 +45,13 @@ jobs:
       run: | 
         # 更新feeds并安装依赖
         ./scripts/feeds update -a
-        ./scripts/feeds install -a -f -p PWpackages
-        ./scripts/feeds install -a -f -p passwall2
+
 
     - name: will download
+      continue-on-error: true
       run: |
+        ./scripts/feeds install -a -f -p PWpackages
+        ./scripts/feeds install -a -f -p passwall2
         make download -j8 V=s
         
     - name: Build passwall2 package
