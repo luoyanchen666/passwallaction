@@ -36,9 +36,8 @@ jobs:
         
     - name: Add passwall2 to feed
       run: |
-        echo "src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git;main" >> "feeds.conf.default"
-        echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2;main" >> "feeds.conf.default"
-        wget  https://github.com/luoyanchen666/passwallaction/edit/main/.config -O ./.config
+        echo "src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git" >> "feeds.conf.default"
+        echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2" >> "feeds.conf.default"
     - name: Prepare SDK configuration
       run: | 
         # 更新feeds并安装依赖
@@ -52,7 +51,6 @@ jobs:
         
     - name: Build passwall2 package
       run: |
-        make defconfig
         make   V=s -j$(nproc)
         
     - name: Collect artifacts
