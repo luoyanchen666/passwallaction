@@ -37,7 +37,7 @@ jobs:
     - name: Add passwall2 to feed
       run: |
         rm feeds.conf.default
-        wget https://github.com/luoyanchen666/passwallaction/blob/main/feeds.conf.default - O feeds.conf.default
+        wget https://github.com/luoyanchen666/passwallaction/blob/main/feeds.conf.default 
     - name: Prepare SDK configuration
       run: | 
         # 更新feeds并安装依赖
