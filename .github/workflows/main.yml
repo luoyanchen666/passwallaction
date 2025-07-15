@@ -20,7 +20,7 @@ jobs:
         echo "Using SDK URL: ${SDK_URL}"
 
     - name: Install zstd tool
-      run: sudo apt-get install -y zstd
+      run: sudo apt-get install -y zstd 
 
     - name: Download and extract OpenWrt SDK
       run: |
@@ -32,7 +32,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y build-essential libncurses5-dev \
-        zlib1g-dev gawk git gettext libssl-dev xsltproc rsync
+        zlib1g-dev gawk git gettext libssl-dev xsltproc rsync python3 python3-distutils
         
     - name: Clone passwall2 source
       run: |
@@ -61,7 +61,7 @@ jobs:
         find bin -name "luci-app-passwall2*.ipk" -exec cp {} artifacts/ \;
         
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: passwall2-packages
         path: artifacts/
