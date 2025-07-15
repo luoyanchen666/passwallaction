@@ -44,8 +44,8 @@ jobs:
     - name: Prepare SDK configuration
       run: | 
         # 更新feeds并安装依赖
-        ./scripts/feeds update -a
-
+        ./scripts/feeds update -a -f -p PWpackages
+        ./scripts/feeds update -a -f -p passwall2
 
     - name: will download
       continue-on-error: true
