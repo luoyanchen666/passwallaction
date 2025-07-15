@@ -3,10 +3,13 @@ name: Build OpenWrt Passwall2
 on:
   repository_dispatch:
   workflow_dispatch:
+  continue-on-error: true
   
 jobs:
   build-passwall2:
     runs-on: ubuntu-22.04
+
+    
 
     steps:
     - name: Checkout repository
