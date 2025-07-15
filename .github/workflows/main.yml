@@ -44,7 +44,7 @@ jobs:
         # 更新feeds并安装依赖
         ./scripts/feeds update -a
         ./scripts/feeds install -a -f -p passwall_packages
-        ./scripts/feeds install -a -f -p passwall2
+        ./scripts/feeds install luci-app-passwall
 
     - name: will download
       run: |
