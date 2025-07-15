@@ -38,10 +38,9 @@ jobs:
       run: |
         echo "src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git;main" >> "feeds.conf.default"
         echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2;main" >> "feeds.conf.default"
+        wget 
     - name: Prepare SDK configuration
-      run: |
-        
-        
+      run: | 
         # 更新feeds并安装依赖
         ./scripts/feeds update -a
         ./scripts/feeds install -a -f -p passwall_packages
