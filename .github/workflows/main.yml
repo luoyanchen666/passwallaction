@@ -34,10 +34,10 @@ jobs:
         sudo apt-get install -y build-essential libncurses5-dev \
         zlib1g-dev gawk git gettext libssl-dev xsltproc rsync python3 python3-distutils
         
-    - name: Clone passwall2 source
+    - name: Add passwall2 to feed
       run: |
-        git clone https://github.com/xiaorouji/openwrt-passwall2.git package/passwall2
-        
+        echo "src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall2-packages.git;main" >> "feeds.conf.default"
+        echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
     - name: Prepare SDK configuration
       run: |
         # 配置默认编译选项
@@ -52,13 +52,12 @@ jobs:
     - name: Build passwall2 package
       run: |
         make defconfig
-        make package/passwall2/compile V=s -j$(nproc)
+        make package/luci-app-passwall2/compile V=s -j$(nproc)
         
     - name: Collect artifacts
       run: |
         mkdir -p artifacts
-        find bin -name "passwall2*.ipk" -exec cp {} artifacts/ \;
-        find bin -name "luci-app-passwall2*.ipk" -exec cp {} artifacts/ \;
+        find bin -name "*.ipk" -exec cp {} artifacts/ \;
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
