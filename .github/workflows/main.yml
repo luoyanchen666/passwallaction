@@ -1,0 +1,68 @@
+name: Build OpenWrt Passwall2
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  build-passwall2:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Read SDK URL
+      id: read-sdk
+      run: |
+        SDK_URL=$(cat 1.txt)
+        echo "SDK_URL=${SDK_URL}" >> $GITHUB_ENV
+        echo "Using SDK URL: ${SDK_URL}"
+
+    - name: Install zstd tool
+      run: sudo apt-get install -y zstd
+
+    - name: Download and extract OpenWrt SDK
+      run: |
+        wget ${{ env.SDK_URL }} -O sdk.tar.zst
+        tar -I zstd -xf sdk.tar.zst --strip-components=1
+        echo "SDK_DIR=$(pwd)" >> $GITHUB_ENV
+
+    - name: Set up build environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libncurses5-dev \
+        zlib1g-dev gawk git gettext libssl-dev xsltproc rsync
+        
+    - name: Clone passwall2 source
+      run: |
+        git clone https://github.com/xiaorouji/openwrt-passwall2.git package/passwall2
+        
+    - name: Prepare SDK configuration
+      run: |
+        # 配置默认编译选项
+        touch .config
+        echo "CONFIG_PACKAGE_passwall2=y" >> .config
+        echo "CONFIG_PACKAGE_passwall2_luci=y" >> .config
+        
+        # 更新feeds并安装依赖
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        
+    - name: Build passwall2 package
+      run: |
+        make defconfig
+        make package/passwall2/compile V=s -j$(nproc)
+        
+    - name: Collect artifacts
+      run: |
+        mkdir -p artifacts
+        find bin -name "passwall2*.ipk" -exec cp {} artifacts/ \;
+        find bin -name "luci-app-passwall2*.ipk" -exec cp {} artifacts/ \;
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: passwall2-packages
+        path: artifacts/
