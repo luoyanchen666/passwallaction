@@ -36,8 +36,8 @@ jobs:
         
     - name: Add passwall2 to feed
       run: |
-        rm feeds.conf.default
-        wget https://github.com/luoyanchen666/passwallaction/blob/main/feeds.conf.default 
+        echo "src-git PWpackages https://github.com/xiaorouji/openwrt-passwall-packages" >> feeds.conf.default
+        echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git" >> feeds.conf.default
     - name: Prepare SDK configuration
       run: | 
         # 更新feeds并安装依赖
