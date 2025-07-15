@@ -37,7 +37,7 @@ jobs:
     - name: Add passwall2 to feed
       run: |
         echo "src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall2-packages.git;main" >> "feeds.conf.default"
-        echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
+        echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall2;main" >> "feeds.conf.default"
     - name: Prepare SDK configuration
       run: |
         # 配置默认编译选项
@@ -47,12 +47,22 @@ jobs:
         
         # 更新feeds并安装依赖
         ./scripts/feeds update -a
-        ./scripts/feeds install -a
+        ./scripts/feeds install luci-base
+        ./scripts/feeds install -a -f -p passwall_packages
+        ./scripts/feeds install luci-app-passwall2
+
+    - name: will download
+      run: |
+        make download -j8 V=s
+
+    - name: Build luci_base
+      run: |
+        make package/luci-base/compile V=99
         
     - name: Build passwall2 package
       run: |
         make defconfig
-        make package/luci-app-passwall2/compile V=s -j$(nproc)
+        make  V=s -j$(nproc)
         
     - name: Collect artifacts
       run: |
